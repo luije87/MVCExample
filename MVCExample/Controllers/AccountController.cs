@@ -20,7 +20,6 @@ namespace MVCExample.Controllers
 
         public AccountController()
         {
-            string hola;
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
