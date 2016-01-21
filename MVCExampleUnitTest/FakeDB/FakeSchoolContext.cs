@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using MVCExample.DAL;
+using MVCExampleUnitTest.App_Data;
 
 namespace MVCExampleUnitTest.FakeDB
 {
-    internal class FakeSchoolContext : ISchoolContext, IDisposable
+    internal class FakeSchoolContext : ISchoolContext
     {
         public List<object> Added = new List<object>();
         public List<object> Removed = new List<object>();
@@ -23,7 +24,12 @@ namespace MVCExampleUnitTest.FakeDB
             return Sets[typeof (T)] as IQueryable<T>;
         }
 
-        public void Add<T>(T entity) where T : class => Added.Add(entity);
+        public void Add<T>(T entity) where T : class
+        {
+            var queryable = Sets[typeof (T)] as IQueryable<T>;
+            queryable.ToList().Add(entity);
+        }
+
         public void Remove<T>(T entity) where T : class => Removed.Remove(entity);
         public void Update<T>(T entity) where T : class => Updated.Add(entity);
         
@@ -34,6 +40,6 @@ namespace MVCExampleUnitTest.FakeDB
 
         public void SaveChanges() => Saved = true;
 
-        public void AddSet<T>(IQueryable<object> objects) => Sets.Add(typeof (T), objects);
+        public void AddSet<T>(IQueryable<T> objects) => Sets.Add(typeof (T), objects);
     }
 }

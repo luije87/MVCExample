@@ -1,4 +1,5 @@
 ﻿using Microsoft.Owin;
+using Microsoft.Practices.Unity;
 using Owin;
 
 [assembly: OwinStartupAttribute(typeof(MVCExample.Startup))]

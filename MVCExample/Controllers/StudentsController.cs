@@ -15,11 +15,6 @@ namespace MVCExample.Controllers
             _db = db;
         }
 
-        public StudentsController()
-        {
-            _db = new SchoolContext();
-        }
-
         // GET: Students
         public ActionResult Index()
         {
