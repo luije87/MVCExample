@@ -35,7 +35,7 @@ namespace MVCExampleUnitTest.FakeDB
         
         public T Find<T>(int? id) where T : class
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public void SaveChanges() => Saved = true;
