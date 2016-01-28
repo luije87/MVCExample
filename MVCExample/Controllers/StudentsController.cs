@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using Microsoft.Practices.Unity;
 using MVCExample.DAL;
 using MVCExample.Models;
 
@@ -8,17 +10,13 @@ namespace MVCExample.Controllers
 {
     public class StudentsController : Controller
     {
-        private readonly ISchoolContext _db;
-
-        public StudentsController(ISchoolContext db)
-        {
-            _db = db;
-        }
+        [Dependency]
+        public ISchoolContext Db { get; set; }
 
         // GET: Students
         public ActionResult Index()
         {
-            return View(_db.Query<Student>().ToList());
+            return View(Db.Query<Student>().ToList());
         }
 
         // GET: Students/Details/5
@@ -28,13 +26,15 @@ namespace MVCExample.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var student = _db.Find<Student>(id);
+            var student = Db.Find<Student>(id);
             if (student == null)
             {
                 return HttpNotFound();
             }
             return View(student);
         }
+
+
 
         // GET: Students/Create
         public ActionResult Create()
@@ -51,8 +51,8 @@ namespace MVCExample.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Add(student);
-                _db.SaveChanges();
+                Db.Add(student);
+                Db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -66,7 +66,7 @@ namespace MVCExample.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var student = _db.Find<Student>(id);
+            var student = Db.Find<Student>(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -83,8 +83,8 @@ namespace MVCExample.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Update(student);
-                _db.SaveChanges();
+                Db.Update(student);
+                Db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(student);
@@ -97,7 +97,7 @@ namespace MVCExample.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var student = _db.Find<Student>(id);
+            var student = Db.Find<Student>(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -110,9 +110,9 @@ namespace MVCExample.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var student = _db.Find<Student>(id);
-            _db.Remove(student);
-            _db.SaveChanges();
+            var student = Db.Find<Student>(id);
+            Db.Remove(student);
+            Db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -120,7 +120,7 @@ namespace MVCExample.Controllers
         {
             if (disposing)
             {
-                _db.Dispose();
+                Db.Dispose();
             }
             base.Dispose(disposing);
         }
