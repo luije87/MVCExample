@@ -68,7 +68,7 @@ namespace MVCExampleUnitTest.Features
         [Test]
         public void Create_WithOut_Arguments()
         {
-            NUnit.Framework.Assert.Throws(typeof (DivideByZeroException), () => _studentsController.Create());
+            Assert.NotNull(_studentsController.Create());
         }
     }
 }
